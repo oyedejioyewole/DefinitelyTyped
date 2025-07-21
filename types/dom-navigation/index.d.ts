@@ -1,8 +1,3 @@
-// Type definitions for non-npm package dom-navigation-browser 1.0
-// Project: https://wicg.github.io/navigation-api
-// Definitions by: Thomas Wilkinson <https://github.com/tbondwilkinson>
-// Definitions: https://github.com/DefinitelyTyped/DefinitelyTyped
-
 interface Window {
     readonly navigation: Navigation;
 }
@@ -72,7 +67,7 @@ interface NavigationHistoryEntryEventMap {
     dispose: Event;
 }
 
-declare class NavigationHistoryEntry extends EventTarget {
+interface NavigationHistoryEntry extends EventTarget {
     readonly key: string;
     readonly id: string;
     readonly url: string | null;
@@ -105,7 +100,12 @@ declare class NavigationHistoryEntry extends EventTarget {
     ): void;
 }
 
-type NavigationTypeString = 'reload' | 'push' | 'replace' | 'traverse';
+declare var NavigationHistoryEntry: {
+    prototype: NavigationHistoryEntry;
+    new(): NavigationHistoryEntry;
+};
+
+type NavigationTypeString = "reload" | "push" | "replace" | "traverse";
 
 interface NavigationUpdateCurrentEntryOptions {
     state: unknown;
@@ -117,7 +117,7 @@ interface NavigationOptions {
 
 interface NavigationNavigateOptions extends NavigationOptions {
     state?: unknown;
-    history?: 'auto' | 'push' | 'replace';
+    history?: "auto" | "push" | "replace";
 }
 
 interface NavigationReloadOptions extends NavigationOptions {
@@ -143,6 +143,7 @@ declare class NavigateEvent extends Event {
     readonly canIntercept: boolean;
     readonly userInitiated: boolean;
     readonly hashChange: boolean;
+    readonly hasUAVisualTransition: boolean;
     readonly destination: NavigationDestination;
     readonly signal: AbortSignal;
     readonly formData: FormData | null;
@@ -167,8 +168,8 @@ interface NavigateEventInit extends EventInit {
 
 interface NavigationInterceptOptions {
     handler?: () => Promise<void>;
-    focusReset?: 'after-transition' | 'manual';
-    scroll?: 'after-transition' | 'manual';
+    focusReset?: "after-transition" | "manual";
+    scroll?: "after-transition" | "manual";
 }
 
 declare class NavigationDestination {

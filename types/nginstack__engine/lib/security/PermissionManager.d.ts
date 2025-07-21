@@ -27,7 +27,7 @@ declare class PermissionManager {
     update(key: number, assignment: PermissionAssignment): number;
     remove(key: number): number;
     removeOrphans(): number;
-    fixClasses(): void;
+    fixClasses(): number;
     fixInheritance(options?: {
         transaction?: Transaction;
         resources?: number[];
@@ -49,5 +49,5 @@ declare namespace PermissionManager {
 }
 import DataSet = require('../dataset/DataSet.js');
 import PermissionAssignment = require('./PermissionAssignment.js');
-type Transaction = import('../dataset/Transaction');
 declare function getInstance(): PermissionManager;
+type Transaction = import('../dataset/Transaction');

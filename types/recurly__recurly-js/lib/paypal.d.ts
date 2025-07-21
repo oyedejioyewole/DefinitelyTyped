@@ -1,18 +1,39 @@
 import { Emitter } from './emitter';
 
+export type PayPalDisplayConfig = {
+  locale?: string;
+  displayName?: string;
+  amount?: string;
+};
+
 export type BraintreeConfig = {
   braintree: {
     clientAuthorization: string;
   };
-};
-
-export type DirectConfig = {
-  display?: {
-    displayName?: string;
+  display?: PayPalDisplayConfig & {
+    enableShippingAddress?: boolean;
+    shippingAddressOverride?: any;
+    shippingAddressEditable?: boolean;
+    billingAgreementDescription?: string;
+    landingPageType?: string;
   };
 };
 
-export type PayPalConfig = BraintreeConfig | DirectConfig;
+export type DirectConfig = {
+  gatewayCode?: string;
+  display?: PayPalDisplayConfig & {
+    logoImageUrl?: string;
+    headerImageUrl?: string;
+  };
+};
+
+export type PayPalCompleteConfig = {
+  payPalComplete?: boolean;
+  display?: PayPalDisplayConfig;
+  gatewayCode?: string;
+};
+
+export type PayPalConfig = BraintreeConfig | DirectConfig | PayPalCompleteConfig;
 
 export type PayPalEvent = 'error' | 'token' | 'cancel' | 'ready';
 

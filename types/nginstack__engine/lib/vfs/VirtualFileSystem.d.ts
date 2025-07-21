@@ -38,9 +38,11 @@ declare class VirtualFileSystem {
     deleteXFileAttributes(fileKey: number, attributeNames: any[]): void;
 }
 declare namespace VirtualFileSystem {
-    export { getInstance, File, MemoryStream, DBKey };
+    export { pathSeparator, invalidChars, getInstance, File, MemoryStream, DBKey };
 }
+declare let pathSeparator: string;
+declare let invalidChars: string[];
+declare function getInstance(): VirtualFileSystem;
 type File = import('../io/File');
 type MemoryStream = import('../io/MemoryStream');
 type DBKey = import('../dbkey/DBKey');
-declare function getInstance(): VirtualFileSystem;

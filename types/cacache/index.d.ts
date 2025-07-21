@@ -1,9 +1,3 @@
-// Type definitions for cacache 15.0
-// Project: https://github.com/npm/cacache#readme
-// Definitions by: Florian Imdahl <https://github.com/ffflorian>
-// Definitions: https://github.com/DefinitelyTyped/DefinitelyTyped
-// TypeScript Version: 2.1
-
 /// <reference types="node" />
 
 export interface CacheObject {
@@ -17,13 +11,20 @@ export interface CacheObject {
     path: string;
     /** Timestamp the entry was first added on. */
     time: number;
+    /** Size of the data */
+    size?: number;
 }
 
 export interface GetCacheObject {
     metadata?: any;
     integrity: string;
     data: Buffer;
-    size: number;
+    size?: number;
+}
+
+export interface Memoizer {
+    get: (key: string) => object | undefined;
+    set: (key: string, value: object) => void;
 }
 
 export namespace get {
@@ -63,7 +64,7 @@ export namespace get {
          * `memoize: false` to the reader functions, but their default will be
          * to read from memory.
          */
-        memoize?: null | boolean | undefined;
+        memoize?: null | boolean | Memoizer | undefined;
 
         /**
          * If provided, the data stream will be verified to check that enough
@@ -92,7 +93,6 @@ export namespace get {
      * `false`.
      */
     function hasContent(cachePath: string, hash: string): Promise<HasContentObject | false>;
-    function hasContentnc(cachePath: string, hash: string): HasContentObject | false;
 
     /**
      * Looks up `key` in the cache index, returning information about the entry
@@ -115,8 +115,6 @@ export namespace get {
      * events at all.
      */
     function stream(cachePath: string, key: string, opts?: Options): NodeJS.ReadableStream;
-    function sync(cachePath: string, key: string, opts?: Options): CacheObject;
-    function syncDigest(cachePath: string, key: string, opts?: Options): CacheObject;
 }
 
 export namespace ls {
@@ -176,7 +174,7 @@ export namespace put {
          * `memoize: false` to the reader functions, but their default will be
          * to read from memory.
          */
-        memoize?: null | boolean | undefined;
+        memoize?: null | boolean | Memoizer | undefined;
 
         /**
          * If provided, the data stream will be verified to check that enough
@@ -326,6 +324,60 @@ export namespace verify {
      * `cache`.
      */
     function lastRun(cachePath: string): Promise<Date>;
+}
+
+export namespace index {
+    interface InsertOptions {
+        /** Arbitrary metadata to be attached to the inserted key. */
+        metadata?: any;
+
+        size?: number;
+    }
+
+    /**
+     * Writes an index entry to the cache for the given key without writing content.
+     *
+     * It is assumed if you are using this method, you have already stored the
+     * content some other way and you only wish to add a new index to that content.
+     * The metadata and size properties are read from opts and used as part of the
+     * index entry.
+     *
+     * Returns a Promise resolving to the newly added entry.
+     */
+    function insert(
+        cache: string,
+        key: string,
+        integrity: string,
+        opts?: InsertOptions,
+    ): Promise<CacheObject>;
+
+    interface CompactOptions {
+        validateEntry?: (entry: CacheObject) => boolean;
+    }
+
+    /**
+     * Uses matchFn, which must be a synchronous function that accepts two entries
+     * and returns a boolean indicating whether or not the two entries match, to
+     * deduplicate all entries in the cache for the given key.
+
+     * If opts.validateEntry is provided, it will be called as a function with the
+     * only parameter being a single index entry. The function must return a
+     * Boolean, if it returns true the entry is considered valid and will be kept
+     * in the index, if it returns false the entry will be removed from the index.
+
+     * If opts.validateEntry is not provided, however, every entry in the index
+     * will be deduplicated and kept until the first null integrity is reached,
+     * removing all entries that were written before the null.
+
+     * The deduplicated list of entries is both written to the index, replacing
+     * the existing content, and returned in the Promise.
+     */
+    function compact(
+        cache: string,
+        key: string,
+        matchFn: (obj1: CacheObject, obj2: CacheObject) => boolean,
+        opts?: CompactOptions,
+    ): Promise<CacheObject[]>;
 }
 
 export function clearMemoized(): Record<string, CacheObject>;

@@ -1,8 +1,4 @@
-// Type definitions for node-osc 6.0
-// Project: https://github.com/MylesBorins/node-osc#readme
-// Definitions by: Mattia Panzeri <https://github.com/panz3r>
-// Definitions: https://github.com/DefinitelyTyped/DefinitelyTyped
-// Minimum TypeScript Version: 4.2
+/// <reference types="node" />
 
 import type { EventEmitter } from "events";
 
@@ -58,6 +54,8 @@ export class Bundle {
     elements: Message[];
 }
 
+export type ClientSendArgs = Array<ArgumentType | Message | MessageLike>;
+
 export type ClientSendCallback = (err: Error | null) => void;
 
 export type ClientCloseCallback = () => void;
@@ -73,8 +71,10 @@ export class Client {
 
     /** Send a message to the server */
     send(addressOrMessage: string | Message | MessageLike): void;
-    send(address: string, ...args: [...Array<Message | MessageLike>, ClientSendCallback]): void;
-    send(...args: [...Array<Message | MessageLike>, ClientSendCallback]): void;
+    send(address: string, ...args: ClientSendArgs): void;
+    send(address: string, ...args: [...ClientSendArgs, ClientSendCallback]): void;
+    send(...args: ClientSendArgs): void;
+    send(...args: [...ClientSendArgs, ClientSendCallback]): void;
 
     /** Send a Bundle message to the server */
     send(bundle: Bundle, callback?: ClientSendCallback): void;

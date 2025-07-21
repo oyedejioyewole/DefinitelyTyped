@@ -8,8 +8,9 @@ declare class Session {
     createKeyLicense: number;
     scriptURI: string | number;
     startupScriptsExecuted: boolean;
-    application: DBKey;
+    application: number;
     realm: string;
+    runtime: string;
     scope: string;
     clientId: string;
     trackingId: string;
@@ -26,11 +27,11 @@ declare class Session {
     authorizeToken(authToken: AuthToken): string;
     updateAuthToken(authToken: AuthToken): void;
     revokeAuthTokenByKey(key: number): void;
-    loginByAuthToken(idToken: string): void;
+    newSessionToken(scope: string | string[]): string;
+    loginByAuthToken(authToken: string): void;
     limitKeyCreation(limit: number): void;
     setPassword(newPassword: string): void;
     executeStartupScripts(): void;
     hasRequest(): boolean;
 }
-import DBKey = require('../dbkey/DBKey.js');
 import AuthToken = require('../security/AuthToken.js');

@@ -1,14 +1,28 @@
-// Type definitions for Elm 0.19
-// Project: http://elm-lang.org
-// Definitions by: Dénes Harmath <https://github.com/thSoft>
-//                 Renan Vaz  <https://github.com/renanpvaz>
-// Definitions: https://github.com/DefinitelyTyped/DefinitelyTyped
-interface ElmInstance<P = {}> {
-    Main: ElmMain<P>;
+interface ElmModule<
+    P,
+    F,
+    Entrypoints extends string[] =
+        // eslint-disable-next-line @definitelytyped/no-single-element-tuple-type
+        ["Main"],
+> {
+    Elm: ElmInstance<P, F, Entrypoints>;
 }
 
-interface ElmMain<P> {
-    init(options: { node?: Node | undefined; flags?: any }): ElmApp<P>;
+type ElmInstance<
+    P,
+    F,
+    // eslint-disable-next-line @definitelytyped/no-single-element-tuple-type
+    Entrypoints extends string[] = ["Main"],
+> = NestedEntrypoints<Entrypoints, P, F>;
+
+type NestedEntrypoints<Entrypoints extends string[], P, F> = Entrypoints extends [
+    infer First extends string,
+    ...infer Rest extends string[],
+] ? { [K in First]: NestedEntrypoints<Rest, P, F> }
+    : ElmMain<P, F>;
+
+interface ElmMain<P, F> {
+    init(options?: { node?: Node | undefined; flags: F } | undefined): ElmApp<P>;
 }
 
 interface ElmApp<P> {

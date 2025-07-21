@@ -16,7 +16,7 @@ function eventMap(ev: Event, errorEv: SpeechRecognitionErrorEvent, srEvent: Spee
 
 const speechGrammar = new SpeechGrammar();
 const speechGrammar2: SpeechGrammar = {
-    src: 'abc',
+    src: "abc",
     weight: 3,
 };
 
@@ -34,7 +34,7 @@ const speechRecognition2: SpeechRecognition = {
     continuous: true,
     grammars: speechGrammarList,
     interimResults: false,
-    lang: 'eng',
+    lang: "eng",
     maxAlternatives: 2,
     onaudioend: null,
     onaudiostart: null,
@@ -64,6 +64,11 @@ const speechRecognition2: SpeechRecognition = {
 };
 const speechRecognition3 = new webkitSpeechRecognition();
 
+const speechRecognition4: SpeechRecognition = {
+    ...speechRecognition2,
+    start: (audioTrack: MediaStreamTrack) => undefined,
+};
+
 const speechRecognitionResultList = new SpeechRecognitionResultList();
 
 const speechRecognitionEventInit: SpeechRecognitionEventInit = {
@@ -71,11 +76,11 @@ const speechRecognitionEventInit: SpeechRecognitionEventInit = {
     results: speechRecognitionResultList,
 };
 
-const speechRecognitionEvent = new SpeechRecognitionEvent('type', speechRecognitionEventInit);
-const speechRecognitionEvent2 = new webkitSpeechRecognitionEvent('type', speechRecognitionEventInit);
+const speechRecognitionEvent = new SpeechRecognitionEvent("type", speechRecognitionEventInit);
+const speechRecognitionEvent2 = new webkitSpeechRecognitionEvent("type", speechRecognitionEventInit);
 
 const speechRecognitionErrorEventInit: SpeechRecognitionErrorEventInit = {
-    error: 'aborted',
-    message: 'abcde',
+    error: "aborted",
+    message: "abcde",
 };
-const speechRecognitionErrorEvent = new SpeechRecognitionErrorEvent('type', speechRecognitionErrorEventInit);
+const speechRecognitionErrorEvent = new SpeechRecognitionErrorEvent("type", speechRecognitionErrorEventInit);

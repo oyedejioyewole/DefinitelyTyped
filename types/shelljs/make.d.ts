@@ -1,4 +1,4 @@
-import shelljs = require('./index');
+import shelljs = require("./index");
 declare global {
     interface Target {
         (...args: any[]): void;
@@ -13,6 +13,7 @@ declare global {
     const cat: typeof shelljs.cat;
     const cd: typeof shelljs.cd;
     const chmod: typeof shelljs.chmod;
+    const cmd: typeof shelljs.cmd;
     const config: typeof shelljs.config;
     const cp: typeof shelljs.cp;
     const dirs: typeof shelljs.dirs;

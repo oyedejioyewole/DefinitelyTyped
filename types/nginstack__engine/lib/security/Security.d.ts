@@ -2,12 +2,15 @@ export = Security;
 declare function Security(): void;
 declare class Security {
     createUser(userName: string, password: string, groups: number[]): number;
-    findUser(userId: string, password: any, groups: any): number | null;
+    findUser(userId: string): number | null;
     deleteUser(userKey: number): void;
     createGroup(groupName: string, groups: any[]): number;
     deleteGroup(groupKey: number): void;
     setUserStatus(userKey: number | DBKey, status: DBKey): void;
     getUserStatus(userKey: number | DBKey): DBKey;
+    setUserAccountType(userKey: number | DBKey, accountType: DBKey): void;
+    getUserAccountType(userKey: number | DBKey): DBKey;
+    userSignatureIsValid(userKey: number | DBKey): boolean;
     changePassword(userKey: number, oldPassword: string, newPassword: string): void;
     setPassword(userKey: any, password: any): void;
     authenticateUser(userId: string, password: string): number;
@@ -48,5 +51,5 @@ declare namespace Security {
     export { getInstance, DataSet };
 }
 import DBKey = require('../dbkey/DBKey.js');
-type DataSet = import('../dataset/DataSet');
 declare function getInstance(): Security;
+type DataSet = import('../dataset/DataSet');
